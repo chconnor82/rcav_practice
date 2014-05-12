@@ -17,15 +17,22 @@ class CalculationsController < ApplicationController
   end
 
   def pmt
-    @interest_rate = params[:interest_rate].to_i
-    @number_of_payments = params[:number_of_payments].to_i
-    @present_value = params[:present_value].to_i
-    rate12 = @interest_rate/100/12
-    numerator = @present_value*rate12.to_f
-    denomenator = 1-(1+rate12.to_f)**-@number_of_payments
-    pmt = numerator/denomenator
-    @payment = "#{pmt(@interest_rate,@number_of_payments,@present_value)}"
+    # @interest_rate = params[:interest_rate].to_i
+    # @number_of_payments = params[:number_of_payments].to_i
+    # @present_value = params[:present_value].to_i
+    # rate12 = @interest_rate.to_i/100/12
+    # numerator = @present_value.to_i*rate12.to_f
+    # denomenator = 1-(1+rate12.to_f)**-@number_of_payments.to_f
+    # @payment = numerator/denomenator
+    # @payment = "#{pmt(@interest_rate,@number_of_payments,@present_value)}"
+    rate = params[:interest_rate].to_f/100
+    nper = params[:number_of_payments].to_f
+    pv = params[:present_value].to_f
+
+    # Formula from http://en.wikipedia.org/wiki/Mortgage_calculator
+    @payment = (rate * pv) / (1 - (1 + rate)**-nper).round(2)
   end
+end
 
   #   def pmt
   # @monthly_interest_rate = (@interest_rate / 100 / 12)
@@ -36,6 +43,6 @@ class CalculationsController < ApplicationController
   # @payment = "#{@monthly_payment}"
     # end
 
-end
+
 
 # (@interest_rate, @number_of_years, @principal_value_of_loan)
